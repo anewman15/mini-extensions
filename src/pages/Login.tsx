@@ -64,9 +64,19 @@ const Login = ({ user, saveUser, classes, saveClasses, students, saveStudents }:
       <form onSubmit={handleLogin} className="mx-4">
         <label>
           <div className="text-xl font-bold my-2">Enter name</div>
-          <input className="block border rounded-md py-1 px-2" type="text" onChange={(event) => setUsername(event.target.value)}/>
+          <input
+            type="text"
+            className="block border rounded-md py-1 px-2"
+            onChange={(event) => setUsername(event.target.value)}
+            required
+          />
         </label>
-        <button className="bg-green-700 py-1 px-4 my-5 border rounded-md text-gray-100" type="submit">{ loading ? 'Loading...' : 'Log in' }</button>
+        <button
+          type="submit"
+          className="bg-green-700 py-1 px-4 my-5 border rounded-md text-gray-100"
+          >
+          { loading ? 'Loading...' : 'Log in' }
+        </button>
       </form>
       { error && <ErrorBox error={error} /> }
     </div>
