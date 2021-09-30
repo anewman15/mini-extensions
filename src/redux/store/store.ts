@@ -4,18 +4,18 @@ import combinedReducer from '../reducers';
 import { loadStoreFromLocalStorage, saveStoreToLocaStorage } from './persist';
 
 type initialStateType = {
-  user: Record<FieldSet> | null,
-  classes: Records<FieldSet> | null,
-  students: undefined
+  user?: Record<FieldSet>,
+  classes?: Records<FieldSet> ,
+  students?: undefined
 };
 
 const initialState: initialStateType = loadStoreFromLocalStorage();
 
-const store = createStore(
+export const store = createStore(
   combinedReducer,
   initialState,
 );
 
 store.subscribe(() => saveStoreToLocaStorage(store.getState()));
 
-export default store;
+export type StoreStateType = ReturnType<typeof store.getState>
