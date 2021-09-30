@@ -1,14 +1,12 @@
-type Action = {
-  type: string,
+type StudentsActionType = {
+  type: 'SAVE_STUDENTS',
   payload: {
-    studentsData: {
-      'string': 'string'
-    }
+    studentsData: any
   }
 };
 
 
-const students = (state = [], action: Action) => {
+const students = (state = [], action: StudentsActionType) => {
   switch (action.type) {
     case 'SAVE_STUDENTS': {
       return action.payload.studentsData
