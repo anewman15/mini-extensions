@@ -1,4 +1,6 @@
-const saveStoreToLocaStorage = (state: any) => {
+import { StoreStateType } from "./store";
+
+const saveStoreToLocaStorage = (state: StoreStateType) => {
   try {
     const miniExtension = JSON.stringify(state);
     localStorage.setItem('miniExtension', miniExtension);
