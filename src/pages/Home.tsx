@@ -5,6 +5,7 @@ import saveUser from '../redux/actions/saveUser';
 import saveClasses from '../redux/actions/saveClasses';
 import saveStudents from '../redux/actions/saveStudents';
 import { StoreStateType } from '../redux/store/store';
+import { Record, FieldSet } from 'airtable';
 
 const Home = () => {
   const user = useSelector((state: StoreStateType) => state.user);
@@ -31,7 +32,7 @@ const Home = () => {
       </div>
       <h2 className="text-green-800 text-center text-4xl font-extrabold">{ user.fields && user.fields.Name }</h2>
       <div>
-        { classes.map((cl: any) => (
+        { classes.map((cl: Record<FieldSet>) => (
           <ClassCard key={cl.id} cl={cl} students={students} />
         ))}
       </div>
