@@ -1,6 +1,7 @@
+import { Records, FieldSet } from "airtable";
 import { SAVE_CLASSES } from "./types";
 
-const saveClasses = (classesData: any) => (
+const saveClasses = (classesData: Records<FieldSet> | []) => (
   {
     type: SAVE_CLASSES,
     payload: {

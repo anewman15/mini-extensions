@@ -1,6 +1,10 @@
 import { SAVE_STUDENTS } from "./types";
 
-const saveStudents = (studentsData: any) => (
+type hashType = {
+  [key: string]: string
+};
+
+const saveStudents = (studentsData: hashType) => (
   {
     type: SAVE_STUDENTS,
     payload: {
