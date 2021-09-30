@@ -1,15 +1,21 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ClassCard from '../components/ClassCard';
 import saveUser from '../redux/actions/saveUser';
 import saveClasses from '../redux/actions/saveClasses';
 import saveStudents from '../redux/actions/saveStudents';
+import { StoreStateType } from '../redux/store/store';
 
-const Home = ({ user, saveUser, classes, saveClasses, students, saveStudents }: any) => {
+const Home = () => {
+  const user = useSelector((state: StoreStateType) => state.user);
+  const classes = useSelector((state: StoreStateType) => state.classes);
+  const students = useSelector((state: StoreStateType) => state.students);
+  const dispatch = useDispatch();
+
   const logOut = () => {
-    saveUser({});
-    saveClasses([]);
-    saveStudents({});
+    dispatch(saveUser({}));
+    dispatch(saveClasses([]));
+    dispatch(saveStudents({}));
   }
 
   return (
@@ -25,7 +31,7 @@ const Home = ({ user, saveUser, classes, saveClasses, students, saveStudents }: 
       </div>
       <h2 className="text-green-800 text-center text-4xl font-extrabold">{ user.fields && user.fields.Name }</h2>
       <div>
-        { classes.length && classes.map((cl: any) => (
+        { classes.map((cl: any) => (
           <ClassCard key={cl.id} cl={cl} students={students} />
         ))}
       </div>
@@ -33,10 +39,4 @@ const Home = ({ user, saveUser, classes, saveClasses, students, saveStudents }: 
   );
 };
 
-const mapStateToProps = (state: any) => ({
-  user: state.user,
-  classes: state.classes,
-  students: state.students
-});
-
-export default connect(mapStateToProps, { saveUser, saveClasses, saveStudents })(Home);
+export default Home;
