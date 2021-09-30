@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { connect } from 'react-redux';
-import { Record, Records, FieldSet } from 'airtable';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router';
 import { allStudentsResponse, getClasses, getUser } from '../sandbox/airtable';
 import createStudentsArray from '../utils/createStudentsArray';
 import createStudentsHash from '../utils/createStudentsHash';
@@ -8,17 +8,18 @@ import filterString from '../utils/filterString';
 import saveUser from '../redux/actions/saveUser';
 import saveClasses from '../redux/actions/saveClasses';
 import saveStudents from '../redux/actions/saveStudents';
-import { useHistory } from 'react-router';
 import ErrorBox from '../components/ErrorBox';
+import { Record, Records, FieldSet } from 'airtable';
 
-const Login = ({ user, saveUser, classes, saveClasses, students, saveStudents }: any) => {
+const Login = () => {
   const [username, setUsername] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const dispatch = useDispatch();
 
   const history = useHistory();
 
-  const handleLogin: any = async (event: any): Promise<void> => {
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
     setLoading(true);
 
@@ -27,27 +28,25 @@ const Login = ({ user, saveUser, classes, saveClasses, students, saveStudents }:
 
     try {
       let userResponse = await getUser(username);
-      let userData: any = null;
+      let userData: Record<FieldSet> | any = null;
       if (!userResponse.length) {
         throw new Error('User Not Found.');
       } else {
         userData = userResponse[0];
-        saveUser(userData);
-        console.log(user)
+        dispatch(saveUser(userData));
       };
 
       classesFilterString = filterString(userData.fields.Classes);
 
       let classesTableResponse = await getClasses(classesFilterString);
-      saveClasses(classesTableResponse);
+      dispatch(saveClasses(classesTableResponse));
 
       const studentIds = createStudentsArray(classesTableResponse);
       studentsFilterString = filterString(studentIds);
 
       let allPeers: Records<FieldSet> = await allStudentsResponse(studentsFilterString)
       const studentsHash = createStudentsHash(allPeers);
-      console.log(studentsHash);
-      saveStudents(studentsHash);
+      dispatch(saveStudents(studentsHash));
 
       setLoading(false);
       setError(null);
@@ -60,7 +59,7 @@ const Login = ({ user, saveUser, classes, saveClasses, students, saveStudents }:
   };
 
   return (
-    <div className="container mx-auto my-4">
+    <div className="container mx-auto my-4 flex flex-col items-center">
       <form onSubmit={handleLogin} className="mx-4">
         <label>
           <div className="text-xl font-bold my-2">Enter name</div>
@@ -83,10 +82,4 @@ const Login = ({ user, saveUser, classes, saveClasses, students, saveStudents }:
   );
 };
 
-const mapStateToProps = (state: any) => ({
-  user: state.user,
-  classes: state.classes,
-  students: state.students
-});
-
-export default connect(mapStateToProps, { saveUser, saveClasses, saveStudents })(Login);
+export default Login;
