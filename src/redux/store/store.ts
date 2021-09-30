@@ -4,9 +4,11 @@ import combinedReducer from '../reducers';
 import { loadStoreFromLocalStorage, saveStoreToLocaStorage } from './persist';
 
 type initialStateType = {
-  user?: Record<FieldSet>,
-  classes?: Records<FieldSet> ,
-  students?: undefined
+  user: Record<FieldSet> | {},
+  classes: Records<FieldSet> | [],
+  students: {
+    [key: string]: string
+  } | {}
 };
 
 const initialState: initialStateType = loadStoreFromLocalStorage();
